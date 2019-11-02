@@ -40,8 +40,11 @@ loss(X) = Flux.logitcrossentropy(model(X), X);
 opt = ADAM(0.001);
 ps = params(encoder, decoder);
 
+X = Flux.onehotbatch(rand(1:M, N), 1:M)
+data = [[X]]
+
 evalcb() = @show(loss(X));
-@epochs 200 Flux.train!(loss, ps, data, opt, cb = throttle(evalcb, 5));
+@epochs 2000 Flux.train!(loss, ps, data, opt, cb = throttle(evalcb, 5));
 
 X_seed = Flux.onehotbatch(1:M,1:M)
 s_seed = encoder(X_seed)
